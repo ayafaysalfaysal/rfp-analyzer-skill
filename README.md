@@ -176,3 +176,7 @@ State files carry a `schema_version`, and the CLI refuses unknown versions rathe
 ├── templates/                # executive summary, upsert batch, change spec, calibration CSV
 └── scripts/rfp.py + rfp_lib/ # deterministic CLI
 ```
+
+## License
+
+Released under the [MIT License](LICENSE).
