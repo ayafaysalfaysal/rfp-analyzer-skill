@@ -1,0 +1,46 @@
+{
+  "target": "REQ-012",
+  "description": "EXAMPLE ONLY - Add Azure AD single sign-on alongside local login",
+  "requested_by": "Client (clarification meeting)",
+  "source": "Meeting minutes section 3",
+  "requirement": {
+    "description": "Users authenticate via Azure AD single sign-on or local accounts",
+    "status": "Changed"
+  },
+  "wbs": [
+    {
+      "id": "WBS-007",
+      "components": {"architecture_design": 1, "ai_generation": 1, "human_validation": 1.5, "integration": 2, "security_performance": 1, "functional_testing": 1},
+      "confidence": "Medium",
+      "effort_drivers": "OIDC integration with tenant configuration and role mapping"
+    },
+    {
+      "key": "wbs-sso-e2e",
+      "module": "Platform & Security",
+      "activity": "SSO end-to-end tests with client tenant",
+      "role": "QA",
+      "requirements": ["REQ-012"],
+      "likely_md": 1.5,
+      "ai_suitability": "Medium",
+      "confidence": "Medium",
+      "depends_on": ["WBS-007"],
+      "effort_drivers": "Test accounts per role; negative cases"
+    }
+  ],
+  "remove_wbs": [],
+  "invalidates_assumptions": [],
+  "assumptions": [
+    {
+      "key": "asm-sso-tenant",
+      "description": "The Client provides an Azure AD test tenant and application registration",
+      "source": "Estimator",
+      "rationale": "Required to build and test SSO",
+      "if_wrong": "Approximately +2 man-days and delayed integration testing",
+      "requirements": ["REQ-012"]
+    }
+  ],
+  "deliverables": [],
+  "exclusions": [],
+  "risks": [],
+  "milestones": []
+}

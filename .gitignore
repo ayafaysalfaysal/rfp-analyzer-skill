@@ -1,0 +1,73 @@
+# ---- Client material & generated analysis (NEVER commit) ----
+rfp-analysis/
+rfp-analysis-*/
+**/rfp-analysis/
+.rfp-state/
+client-rfp/
+client-rfps/
+clients/
+rfps/
+input/
+inputs/
+# Generated deliverables, wherever they end up
+*-statement-of-work*.docx
+*-statement-of-work*.pdf
+*-statement-of-work*.md
+*-wbs-estimation*.xlsx
+*-requirements-matrix*.xlsx
+*-client-clarifications*.xlsx
+*-requirements-traceability*.xlsx
+*-change-impact-register*.xlsx
+*-executive-summary.md
+*-risks-and-assumptions.md
+*-scope-recommendations.md
+*-decision-log.md
+*-scope-coverage-report.md
+# ...but keep the skill's own templates
+!.claude/skills/rfp-analyzer/templates/
+!.claude/skills/rfp-analyzer/templates/**
+# Office/PDF documents anywhere except the synthetic test fixtures
+*.docx
+*.xlsx
+*.xls
+*.doc
+*.pdf
+*.pptx
+*.msg
+*.eml
+!tests/fixtures/**
+
+# ---- Local configuration (may contain company/client details) ----
+.claude/skills/rfp-analyzer/config.yaml
+.claude/rfp-analyzer.config.yaml
+rfp-config.yaml
+*.local.yaml
+.claude/settings.local.json
+
+# ---- Credentials & secrets ----
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials*.json
+
+# ---- Python / tooling ----
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+.coverage
+htmlcov/
+
+# ---- Temporary / OS ----
+*.tmp
+.tmp-*
+~$*
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,136 @@
+# rfp-analyzer configuration — sample with reasonable, company-neutral defaults.
+#
+# Copy to one of these locations (first match wins) and adjust:
+#   1. --config <path> passed to scripts/rfp.py
+#   2. <analysis-dir>/rfp-config.yaml          (per-RFP overrides)
+#   3. <project>/.claude/rfp-analyzer.config.yaml
+#   4. <skill-dir>/config.yaml                  (your team defaults; git-ignored)
+# Any key you omit falls back to the value shown here.
+
+company:
+  name: "Your Company"          # appears on the SOW cover, header and vendor references
+  legal_name: ""                # optional; used on the SOW cover if set
+  primary_color: "1F3864"       # hex, no '#'; headings and table headers
+  accent_color: "2E75B6"
+  font: "Calibri"
+  logo_path: ""                 # optional PNG/JPG for the SOW cover page
+
+terminology:
+  man_day: "man-day"
+  man_days: "man-days"
+  vendor: "Vendor"              # e.g. "Supplier", "Contractor", or your company short name
+  client: "Client"              # e.g. "Customer", "Authority"
+
+estimation:
+  hours_per_man_day: 8          # 1 man-day = 8 productive hours by default
+  rounding_increment: 0.5       # work-package estimates are rounded to this (man-days)
+  sow_rounding_increment: 1     # client-facing SOW figures are rounded to this
+  # Used only when a work package supplies a Likely value but no explicit Low/High.
+  range_multipliers:
+    High:   {low: 0.85, high: 1.25}
+    Medium: {low: 0.75, high: 1.5}
+    Low:    {low: 0.6,  high: 2.0}
+  ai_first:
+    # Estimates are authored for the reference team described by `experienced`.
+    # Other profiles adjust effort per AI-suitability class to reflect lower AI
+    # tool maturity. These are planning assumptions, NOT benchmark data.
+    team_profile: experienced
+    profiles:
+      experienced:
+        description: "Team uses Claude Code / AI coding tools daily with established review, prompting and testing practices."
+        High: 1.0
+        Medium: 1.0
+        Low: 1.0
+      developing:
+        description: "Team uses AI tools regularly but practices (review checklists, prompt libraries, AI-assisted testing) are still forming."
+        High: 1.25
+        Medium: 1.15
+        Low: 1.05
+      new_to_ai_tools:
+        description: "Team is adopting AI coding tools on this project."
+        High: 1.5
+        Medium: 1.3
+        Low: 1.1
+    # Multiplier from your own historical estimate-vs-actual data (see `rfp.py calibrate`).
+    # Leave at 1.0 unless you have real data; never invent a benchmark.
+    calibration_factor: 1.0
+    calibration_source: ""
+  contingency:
+    method: confidence_based    # confidence_based | flat | none
+    flat_percent: 15
+    by_confidence: {High: 5, Medium: 10, Low: 20}
+    provisional_extra_percent: 10   # added when an estimate depends on an open Critical clarification
+    max_percent: 35
+  sanity_checks:
+    pm_percent_min: 8           # PM effort as % of total base effort
+    pm_percent_max: 18
+    qa_percent_min: 12          # QA effort as % of total base effort
+  material_change_md: 2         # changes with |effort delta| >= this (or any scope change) need approval
+
+team:
+  working_days_per_week: 5
+  start_date: ""                # optional ISO date (YYYY-MM-DD) to print calendar dates
+  max_people_per_item: 2        # default max people working one work package in parallel
+  # count = people available in the role; allocation = fraction of each person's time.
+  # Remove or zero out roles you do not staff; add any other roles you use.
+  roles:
+    PM:                  {count: 1, allocation: 0.5, title: "Project Manager"}
+    BA:                  {count: 1, allocation: 1.0, title: "Business Analyst"}
+    Architect:           {count: 1, allocation: 0.5, title: "Solution Architect"}
+    UI/UX Designer:      {count: 1, allocation: 1.0, title: "UI/UX Designer"}
+    Frontend Engineer:   {count: 1, allocation: 1.0, title: "Frontend Engineer"}
+    Backend Engineer:    {count: 2, allocation: 1.0, title: "Backend Engineer"}
+    Full-Stack Engineer: {count: 1, allocation: 1.0, title: "Full-Stack Engineer"}
+    Mobile Engineer:     {count: 1, allocation: 1.0, title: "Mobile Engineer"}
+    QA:                  {count: 1, allocation: 1.0, title: "QA Engineer"}
+    DevOps:              {count: 1, allocation: 0.5, title: "DevOps Engineer"}
+    Data Engineer:       {count: 0, allocation: 1.0, title: "Data Engineer"}
+    ML Engineer:         {count: 0, allocation: 1.0, title: "ML Engineer"}
+    Technical Writer:    {count: 0, allocation: 1.0, title: "Technical Writer"}
+    Trainer:             {count: 0, allocation: 1.0, title: "Trainer"}
+
+timeline:
+  client_review_days: 5         # elapsed working days for client review at each phase milestone
+  deployment_buffer_days: 3     # elapsed days after the last milestone for go-live
+  phase_gating: false           # true = a phase cannot start until the previous phase's review ends
+  level_of_effort_roles: [PM]   # roles whose effort spans the project instead of occupying the schedule
+
+stack:                          # preferred technical stack (guides WBS and AI-suitability judgment)
+  frontend: ""
+  backend: ""
+  mobile: ""
+  database: ""
+  cloud: ""
+  other: ""
+
+reusable_components: []         # e.g. - {name: "Auth starter", description: "SSO/RBAC module", applies_to: ["user management"]}
+
+outputs:
+  analysis_dir_name: rfp-analysis
+  client_copy_clarifications: true   # also write 03-client-clarifications-CLIENT-COPY.xlsx (client questions only)
+  sow_pdf: false                     # PDF only when requested (needs LibreOffice/Word); see README
+
+sow:
+  document_title: "Statement of Work"
+  show_requirement_ids: true          # show REQ IDs in the module scope section
+  include_contingency_in_totals: true # client figures include contingency, distributed across modules
+  show_contingency_line: false        # never show contingency as a separate line unless requested
+  disclose_ai_tooling: false          # set true when the client requests or the contract requires disclosure
+  methodology_statement: >-
+    The Vendor will deliver the solution using an iterative, quality-controlled engineering process:
+    short development iterations, peer-reviewed code, automated testing where practical, and
+    regular demonstrations to the Client for early feedback.
+  # Terms that must not appear in a client-facing SOW unless disclose_ai_tooling is true.
+  forbidden_terms:
+    - "vibe coding"
+    - "vibe-coding"
+    - "prompt engineering"
+    - "AI-generated"
+    - "Claude"
+    - "contingency"
+    - "productivity factor"
+  confidentiality_footer: "Confidential"
+
+detail_level:
+  internal: full                # internal workbooks show every driver, assumption and contingency
+  client: summary               # client documents show approved figures only

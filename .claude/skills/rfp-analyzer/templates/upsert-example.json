@@ -1,0 +1,24 @@
+{
+  "reason": "EXAMPLE ONLY - shape of an upsert batch. Replace every value with content from the actual RFP.",
+  "project": {"name": "<as stated in the RFP>", "client": "<as stated, or leave empty>", "rfp_reference": "<ref>", "solution_types": ["Web application / portal"], "phases": ["Phase 1"]},
+  "requirements": [
+    {"key": "r-login", "module": "User Management", "description": "Users log in with organisational SSO.", "type": "Security and compliance", "classification": "Mandatory", "priority": "Must", "priority_source": "Client", "phase": "Phase 1", "sources": [{"doc": "DOC-001", "location": "§4.2, p.12", "quote": "shall authenticate via SSO"}], "clarification_required": true},
+    {"key": "r-export", "module": "Reporting", "description": "Reports can be exported to Excel.", "type": "Reporting and analytics", "classification": "Optional", "sources": [{"doc": "DOC-002", "location": "row F-17"}]}
+  ],
+  "clarifications": [
+    {"key": "q-idp", "audience": "Client", "category": "Technical", "topic": "Identity", "priority": "Critical", "question": "Section 4.2 requires SSO. Which identity provider and protocol (SAML 2.0 or OIDC) should be used, and will a test tenant be available?", "why": "The integration approach depends on the identity provider.", "impact": "Unknown IdP could add 3-6 MD.", "requirements": ["r-login"]}
+  ],
+  "wbs": [
+    {"key": "w-sso", "module": "User Management", "workstream": "Backend", "activity": "SSO integration and role mapping", "role": "Backend Engineer", "requirements": ["r-login"], "components": {"architecture_design": 0.5, "ai_generation": 0.5, "human_validation": 1, "integration": 1.5, "security_performance": 1, "functional_testing": 0.5}, "ai_suitability": "Medium", "confidence": "Medium", "assumptions": ["a-idp"], "deliverables": ["del-platform"], "effort_drivers": "Standard OIDC; role mapping from group claims"},
+    {"key": "w-pm", "module": "Project Management", "activity": "Project management and governance", "role": "PM", "cross_cutting": true, "scheduling": "level_of_effort", "likely_md": 6, "ai_suitability": "Medium", "confidence": "High", "effort_drivers": "About 10% of total effort"}
+  ],
+  "assumptions": [
+    {"key": "a-idp", "description": "The client's identity provider supports OIDC and provides a test tenant.", "source": "Estimator", "rationale": "Basis for the SSO estimate.", "requirements": ["r-login"], "if_wrong": "SAML or a custom IdP adds 2-4 MD."}
+  ],
+  "deliverables": [
+    {"key": "del-platform", "name": "Production platform", "type": "Software", "requirements": ["r-login"], "acceptance_criteria": "All UAT scenarios pass with no open critical defects."}
+  ],
+  "exclusions": [
+    {"description": "Identity provider configuration on the client side."}
+  ]
+}

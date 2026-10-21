@@ -1,0 +1,4 @@
+project,activity,ai_suitability,estimated_md,actual_md
+EXAMPLE-ONLY-replace-with-real-data,Customer CRUD module,High,3,3.5
+EXAMPLE-ONLY-replace-with-real-data,Approval workflow,Medium,8,9
+EXAMPLE-ONLY-replace-with-real-data,Legacy ERP integration,Low,12,15
