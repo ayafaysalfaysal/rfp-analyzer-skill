@@ -48,6 +48,8 @@ clarifications, estimates, decisions and SOW deliverables therefore stay synchro
 
 ## Installation
 
+> **Non-technical users:** follow the step-by-step [setup and quick-start guide for PMs](SETUP-FOR-PMS.md).
+
 **Personal skill** (available in every project):
 ```bash
 git clone https://github.com/ayafaysalfaysal/rfp-analyzer-skill.git
